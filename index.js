@@ -6,8 +6,8 @@ const app = express.Router();
 const User = require('./userModel');
 
 user1 = new User({
-    username: "a",
-    password: "b",
+    username: "maxime",
+    password: "test",
     email: "test@test.com"
 });
 
@@ -68,8 +68,6 @@ passport.use(new LocalStrategy(
         }
     }
 ));
-
-
 
 passport.serializeUser((user, done) => {
     done(null, user._id);
