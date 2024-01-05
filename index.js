@@ -100,8 +100,7 @@ app.get('/protected', (req, res) => {
     else{
         res.redirect('/login');
     }
-
-})
+});
 
 app.post('/login', passport.authenticate('local', { failureRedirect: '/login', failureFlash: false }),
     (req, res) => {
