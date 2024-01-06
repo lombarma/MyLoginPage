@@ -4,6 +4,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const express = require('express');
 const app = express.Router();
 const User = require('./userModel');
+const Task = require('./taskModel');
 
 user1 = new User({
     username: "maxime",
@@ -108,18 +109,42 @@ app.get('/login', (req, res) => {
 
 app.use("/public", express.static(__dirname + "/public"));
 
-app.get('/protected', (req, res) => {
+app.get('/myTasks', (req, res) => {
     if(req.isAuthenticated()){
-        res.send('<h1>Page protégée</h1>');
+        //res.send('<h1>Page protégée</h1>');
+        res.sendFile(__dirname + '/views/myTasks.html');
     }
     else{
         res.redirect('/login');
     }
 });
 
+app.get('/createTask', (req, res) => {
+    res.sendFile(__dirname + '/views/createTask.html');
+});
+app.post('/createTask', (req, res) => {
+    if (!req.isAuthenticated()) {
+        return res.redirect('/login');
+    }
+    let task = new Task({
+        task: req.body.task,
+        user: req.user._id
+    });
+
+    task.save()
+        .then((doc) => {
+            res.redirect('/myTasks');
+            console.log("Task created : " + doc);
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).send("Erreur lors de la création de tâche.");
+        })
+});
+
 app.post('/login', passport.authenticate('local', { failureRedirect: '/login', failureFlash: false }),
     (req, res) => {
-        res.redirect('/protected');
+        res.redirect('/myTasks');
     }
 );
 
@@ -150,7 +175,7 @@ app.post('/signin', (req, res) => {
     catch (err) {
         console.error("User not created", err);
     }
-})
+});
 
 
 module.exports=app
