@@ -8,9 +8,7 @@ app.use(express.json());
 app.use('/', router);
 
 mongoose
-    .connect(process.env.MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true})
+    .connect(process.env.MONGO_URI)
     .then(() => console.log("Database connected!"))
     .catch(err => console.log(err));
 

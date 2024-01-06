@@ -11,26 +11,41 @@ user1 = new User({
     email: "test@test.com"
 });
 
-user1.save()
+/*user1.save()
     .then(doc => {
         console.log(doc);
     })
     .catch(err => {
         console.error(err);
-    })
+    })*/
 
-async function checkUserInDB(username, password){
+async function checkUserInDB(username){
     try{
-        const userFound = await User.find({
-            username: username,
-            password: password
+        const usersFound = await User.find({
+            username: username
         });
-        return !!userFound;
+        return usersFound.length > 0;
     } catch(err){
         console.error(err);
         return false;
     }
 }
+
+async function createUserInDB(user){
+    if(await checkUserInDB(user.username, user.password)){
+        console.log("not possible");
+        return;
+    }
+    try{
+        const doc = await user.save();
+        console.log(doc);
+    }
+    catch(err) {
+        console.error(err);
+    }
+}
+
+//createUserInDB(user1);
 
 let bodyParser = require('body-parser');
 
@@ -117,6 +132,25 @@ app.get('/logout', (req, res) => {
         res.redirect('/');
     });
 });
+
+app.get('/signin', (req, res) => {
+    res.sendFile(__dirname + "/views/signin.html");
+})
+
+app.post('/signin', (req, res) => {
+    let user = new User({
+        username: req.body.username,
+        password: req.body.password,
+        email: req.body.email
+    });
+    try{
+        createUserInDB(user);
+        res.redirect('/login')
+    }
+    catch (err) {
+        console.error("User not created", err);
+    }
+})
 
 
 module.exports=app
