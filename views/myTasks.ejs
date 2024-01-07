@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My tasks</title>
+</head>
+<body>
+<div class="tasks-container">
+    <h2>MyTasks</h2>
+    <a href="/createTask">Create a task</a>
+    <div class="list-container">
+        <ul>
+            <% tasks.forEach((task) => { %>
+            <li><%= task.task %> - <%= task.date %></li>
+            <% }); %>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

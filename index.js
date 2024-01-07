@@ -2,9 +2,12 @@ const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const express = require('express');
-const app = express.Router();
+//const app = express.Router();
+const app = express();
 const User = require('./userModel');
 const Task = require('./taskModel');
+
+app.set('view engine', 'ejs');
 
 user1 = new User({
     username: "maxime",
@@ -112,7 +115,10 @@ app.use("/public", express.static(__dirname + "/public"));
 app.get('/myTasks', (req, res) => {
     if(req.isAuthenticated()){
         //res.send('<h1>Page protégée</h1>');
-        res.sendFile(__dirname + '/views/myTasks.html');
+        Task.find({user:req.user})
+            .then(tasks => {
+                res.render('myTasks', {tasks:tasks});
+            });
     }
     else{
         res.redirect('/login');
