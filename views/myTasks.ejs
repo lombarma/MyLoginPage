@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>My tasks</title>
+    <link rel="stylesheet" type="text/css" href="/public/myTasks.css">
 </head>
 <body>
 <div class="tasks-container">
@@ -11,7 +12,10 @@
     <div class="list-container">
         <ul>
             <% tasks.forEach((task) => { %>
-            <li><%= task.task %> - <%= task.date %></li>
+                <li class="task-item">
+                    <span class="text-task"><%= task.task %></span>
+                    <span class="date-task"><%= task.formattedDate %></span>
+                </li>
             <% }); %>
         </ul>
     </div>

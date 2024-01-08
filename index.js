@@ -110,19 +110,31 @@ app.get('/login', (req, res) => {
 });
 
 app.use("/public", express.static(__dirname + "/public"));
+app.use("/views", express.static(__dirname + "/views"));
 
 app.get('/myTasks', (req, res) => {
     if(req.isAuthenticated()){
-        //res.send('<h1>Page protégée</h1>');
-        Task.find({user:req.user})
+        Task.find({user: req.user})
             .then(tasks => {
-                res.render('myTasks', {tasks:tasks});
+                const formattedTasks = tasks.map(task => {
+                    return {
+                        ...task.toObject(),
+                        formattedDate: task.date.toLocaleDateString('fr-FR', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        }) + ' ' + task.date.toLocaleTimeString('fr-FR')
+                    };
+                });
+                res.render('myTasks', { tasks: formattedTasks });
             });
     }
     else{
         res.redirect('/login');
     }
 });
+
 
 app.get('/createTask', (req, res) => {
     res.sendFile(__dirname + '/views/createTask.html');
@@ -165,7 +177,7 @@ app.get('/logout', (req, res) => {
 
 app.get('/signin', (req, res) => {
     res.sendFile(__dirname + "/views/signin.html");
-})
+});
 
 app.post('/signin', (req, res) => {
     let user = new User({

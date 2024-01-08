@@ -8,7 +8,7 @@
 }
 
 #loginButton {
-    background-color: deeppink;
+    background-color: #5cb85c;
     border: none;
     color: white;
     padding: 15px 32px;
@@ -22,5 +22,5 @@
 }
 
 #loginButton:hover {
-    background-color: #ff66b3;
+    background-color: #4cae4c;
 }
