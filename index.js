@@ -102,7 +102,7 @@ passport.deserializeUser(async (id, done) => {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/views/firstPage.html')
+    res.sendFile(__dirname + '/views/index.html')
 });
 
 app.get('/login', (req, res) => {
