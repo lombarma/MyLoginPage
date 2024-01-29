@@ -114,7 +114,7 @@ app.use("/views", express.static(__dirname + "/views"));
 
 app.get('/myTasks', (req, res) => {
     if(req.isAuthenticated()){
-        Task.find({user: req.user})
+        Task.find({user: req.user}).sort({date: -1})
             .then(tasks => {
                 const formattedTasks = tasks.map(task => {
                     return {
@@ -124,7 +124,7 @@ app.get('/myTasks', (req, res) => {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric'
-                        }) + ' ' + task.date.toLocaleTimeString('fr-FR')
+                        })
                     };
                 });
                 res.render('myTasks', { tasks: formattedTasks });
@@ -157,6 +157,20 @@ app.post('/createTask', (req, res) => {
             console.error(err);
             res.status(500).send("Erreur lors de la création de tâche.");
         })
+});
+
+app.post('/deleteTask', async (req, res) => {
+    if(!req.isAuthenticated()){
+        return res.redirect('/login');
+    }
+
+    try {
+        await Task.findByIdAndDelete(req.body.taskId);
+        res.redirect('/myTasks');
+    } catch (err){
+        console.error(err);
+        res.redirect('/myTasks');
+    }
 });
 
 app.post('/login', passport.authenticate('local', { failureRedirect: '/login', failureFlash: false }),

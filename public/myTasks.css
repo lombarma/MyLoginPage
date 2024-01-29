@@ -5,6 +5,12 @@ body {
     padding: 20px;
 }
 
+.logout {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+
 .tasks-container {
     background: white;
     padding: 20px;
@@ -15,12 +21,6 @@ body {
 h2 {
     color: #333;
 }
-
-.list-container {
-    margin-top: 20px;
-}
-
-
 
 ul {
     list-style: none;
@@ -44,11 +44,18 @@ li {
     border-radius: 4px;
 }
 
-.date-task {
-    color: #555;
-    font-size: 0.9em;
-    font-style: italic;
-    margin-left: 10px;
+.delete-task {
+    stroke: #007BFF;
+    transition: all 0.5s ease-in-out;
+}
+
+.delete-task:hover {
+    transform: scale(1.20);
+    cursor: pointer;
+}
+
+button {
+    cursor: pointer;
 }
 
 
